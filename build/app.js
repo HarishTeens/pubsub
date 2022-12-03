@@ -18,3 +18,4 @@ app.use(routes_1.default);
 app.listen(3001, () => {
     console.log('Server Started');
 });
+exports.default = app;
