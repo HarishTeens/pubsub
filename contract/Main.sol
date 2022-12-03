@@ -161,31 +161,27 @@ contract LockFunds is Ownable {
     function createService(uint256 serviceId, uint256 amount) external {
         service storage item = services[serviceId];
         item.amount = amount;
-        item
+        item.creator = msg.sender;
     }
 
-    function lockFunds(
-        uint256 orderId,
-        uint256 serviceId,
-        address receiver
-    ) external payable {
+    function lockFunds(uint256 orderId, uint256 serviceId) external payable {
         order storage item = orders[orderId];
         service storage sItem = services[serviceId];
         require(sItem.amount != 0, "Service not found");
         require(msg.value == sItem.amount, "Service amount is incorrect");
         require(item.createdAt == 0, "Order is already created");
         item.creator = msg.sender;
-        item.receiver = receiver;
+        item.receiver = sItem.creator;
         item.amount = sItem.amount;
         item.createdAt = block.timestamp;
         item.state = STATES.PENDING;
         orderCreated[msg.sender].push(orderId);
-        orderToReceive[receiver].push(orderId);
+        orderToReceive[sItem.creator].push(orderId);
 
         IPUSHCommInterface(0xb3971BCef2D791bc4027BbfedFb47319A4AAaaAa)
             .sendNotification(
                 0x857cDF5Ea69eCBc50DD6E0618310655F0b69c87e, // from channel
-                receiver, // to recipient, put address(this) in case you want Broadcast or Subset. For Targetted put the address to which you want to send
+                sItem.creator, // to recipient, put address(this) in case you want Broadcast or Subset. For Targetted put the address to which you want to send
                 bytes(
                     string(
                         // We are passing identity here: https://docs.epns.io/developers/developer-guides/sending-notifications/advanced/notification-payload-types/identity/payload-identity-implementations
