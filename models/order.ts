@@ -27,6 +27,8 @@ const orderSchema = new Schema<IOrder>({
     agents: [serviceUserSchema],
     subscriber: { type: serviceUserSchema, required: true }
     
+},{
+    timestamps: true
 });
 
 // 3. Create a Model.

@@ -14,6 +14,8 @@ const userSchema = new Schema<IUser>({
   name: { type: String, required: true },
   services: [{ type: Schema.Types.ObjectId, ref: 'Service' }],
   orders: [{ type: Schema.Types.ObjectId, ref: 'Order' }]
+},{
+  timestamps: true
 });
 
 // 3. Create a Model.

@@ -36,6 +36,8 @@ const serviceSchema = new Schema<IService>({
     subscriber: {
         action: {type: Number, required: true}
     }
+},{
+    timestamps: true
 });
 
 // 3. Create a Model.
