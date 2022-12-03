@@ -1,9 +1,10 @@
 import { Router } from "express";
+import controllers from "../controllers";
 
 const router = Router();
 
 
-router.get("/services")
+router.get("/services", controllers.services.listServices)
 router.get("/services/:id")
 router.put("/services")
 
@@ -13,7 +14,7 @@ router.put("/ordres")
 router.post("/orders")
 
 
-router.put("/user/auth")
+router.get("/:address/nonce")
 
 
 export default router;

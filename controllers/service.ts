@@ -2,9 +2,16 @@ const createService = () => {
 
 }
 
+const listServices = (req, res) => {
+    res.json({
+        user: req.auth.user
+    })
+}
+
 
 const services = {
-    createService
+    createService,
+    listServices
 }
 
 export default services;

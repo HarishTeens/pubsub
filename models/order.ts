@@ -1,5 +1,5 @@
 import { Schema, model } from 'mongoose';
-import { IService, IServiceUser, serviceUserSchema } from './service';
+import { IService, IServiceUser, serviceUserSchema } from './Service';
 
 enum ORDER_STATUS {
     ORDER_PLACED,

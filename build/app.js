@@ -7,11 +7,14 @@ const express_1 = __importDefault(require("express"));
 const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
 const app = (0, express_1.default)();
-const index_1 = __importDefault(require("./models/index"));
-app.get("/", (req, res) => {
+const routes_1 = __importDefault(require("./config/routes"));
+const middlewares_1 = __importDefault(require("./middlewares"));
+app.get("/", (_req, res) => {
     res.send("Welcome to easy crow!");
 });
-app.listen(3000, () => {
+app.use(middlewares_1.default.auth.default, routes_1.default);
+app.use(middlewares_1.default.error.allErrorHandler);
+app.use(routes_1.default);
+app.listen(3001, () => {
     console.log('Server Started');
-    (0, index_1.default)();
 });
