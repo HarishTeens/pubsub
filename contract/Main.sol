@@ -122,6 +122,15 @@ abstract contract Ownable is Context {
 
 pragma solidity ^0.8.0;
 
+// PUSH Comm Contract Interface
+interface IPUSHCommInterface {
+    function sendNotification(
+        address _channel,
+        address _recipient,
+        bytes calldata _identity
+    ) external;
+}
+
 contract LockFunds is Ownable {
     uint256 public timeoutPeriod = 3 days;
     enum STATES {
@@ -132,6 +141,7 @@ contract LockFunds is Ownable {
         DISPUTED
     }
     struct service {
+        address creator;
         uint256 amount; // in WEI
     }
     struct order {
@@ -151,6 +161,7 @@ contract LockFunds is Ownable {
     function createService(uint256 serviceId, uint256 amount) external {
         service storage item = services[serviceId];
         item.amount = amount;
+        item
     }
 
     function lockFunds(
@@ -170,6 +181,26 @@ contract LockFunds is Ownable {
         item.state = STATES.PENDING;
         orderCreated[msg.sender].push(orderId);
         orderToReceive[receiver].push(orderId);
+
+        IPUSHCommInterface(0xb3971BCef2D791bc4027BbfedFb47319A4AAaaAa)
+            .sendNotification(
+                0x857cDF5Ea69eCBc50DD6E0618310655F0b69c87e, // from channel
+                receiver, // to recipient, put address(this) in case you want Broadcast or Subset. For Targetted put the address to which you want to send
+                bytes(
+                    string(
+                        // We are passing identity here: https://docs.epns.io/developers/developer-guides/sending-notifications/advanced/notification-payload-types/identity/payload-identity-implementations
+                        abi.encodePacked(
+                            "0", // this is notification identity: https://docs.epns.io/developers/developer-guides/sending-notifications/advanced/notification-payload-types/identity/payload-identity-implementations
+                            "+", // segregator
+                            "3", // this is payload type: https://docs.epns.io/developers/developer-guides/sending-notifications/advanced/notification-payload-types/payload (1, 3 or 4) = (Broadcast, targetted or subset)
+                            "+", // segregator
+                            "Order Placed", // this is notificaiton title
+                            "+", // segregator
+                            "Someone placed an order" // notification body
+                        )
+                    )
+                )
+            );
     }
 
     function claimCompleteJob(uint256 orderId) external {
