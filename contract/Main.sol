@@ -153,10 +153,12 @@ contract LockFunds is Ownable {
         orderToReceive[receiver].push(orderId);
     }
 
-    function getFunds(uint256 orderId) external payable {
+    function claimFunds(uint256 orderId) external payable {
         order storage item = orders[orderId];
         require(item.state == STATES.PENDING, "Order is not live");
         require(item.job == true, "Job not done");
+        require(item.receiver == msg.sender, "You are not the receiver")
+        ;
         item.state = STATES.COMPLETED;
         payable(msg.sender).transfer(item.amount);
     }
@@ -184,7 +186,7 @@ contract LockFunds is Ownable {
         item.state = STATES.DISPUTED;
     }
 
-    function ownerWithdraw(uint256 amount) external  onlyOwner {
-        payable(msg.sender).transfer(amount);
-    }
+    // function ownerWithdraw(uint256 amount) external  onlyOwner {
+    //     payable(msg.sender).transfer(amount);
+    // }
 }
