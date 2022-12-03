@@ -146,7 +146,7 @@ contract LockFunds is Ownable {
         require(item.createdAt == 0, "Order is already created");
         item.creator = msg.sender;
         item.receiver = receiver;
-        item.amount == msg.value;
+        item.amount = msg.value;
         item.createdAt = block.timestamp;
         item.state = STATES.PENDING;
         orderCreated[msg.sender].push(orderId);
