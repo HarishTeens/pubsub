@@ -37,7 +37,8 @@ const createService = async (req, res) => {
     })
     await Promise.all([prom1, prom2]);
     res.json({
-        success: true
+        success: true,
+        data: newService
     });
 }
 
