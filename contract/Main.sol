@@ -124,9 +124,13 @@ contract LockFunds is Ownable {
     uint256 public timeoutPeriod = 3 days;
     enum STATES {
         PENDING,
-        CANCELLED,
+        CREATOR_ACK,
+        SUBSCRIBER_ACK,
         COMPLETED,
         DISPUTED
+    }
+    struct service {
+        uint256 amount;
     }
     struct order {
         address creator;
@@ -136,55 +140,60 @@ contract LockFunds is Ownable {
         bool job;
         STATES state;
     }
+    mapping(uint256=>service) public services;
     mapping(uint256=>order) public orders;
 
     mapping(address=>uint256[]) public orderToReceive;
     mapping(address=>uint256[]) public orderCreated;
 
-    function lockFunds(uint256 orderId, address receiver) external payable {
+    function createService(uint256 serviceId, uint256 amount) external {
+        service storage item = services[serviceId];
+        item.amount = amount;
+    }
+    function lockFunds(uint256 orderId, uint256 serviceId, address receiver) external payable {
         order storage item = orders[orderId];
+        service storage sItem = services[serviceId];
+        require(msg.value == sItem.amount, "Service amount is incorrect");
         require(item.createdAt == 0, "Order is already created");
         item.creator = msg.sender;
         item.receiver = receiver;
-        item.amount = msg.value;
+        item.amount = sItem.amount;
         item.createdAt = block.timestamp;
         item.state = STATES.PENDING;
         orderCreated[msg.sender].push(orderId);
         orderToReceive[receiver].push(orderId);
     }
 
-    function claimFunds(uint256 orderId) external payable {
+    function claimCompleteJob(uint256 orderId) external {
         order storage item = orders[orderId];
-        require(item.state == STATES.PENDING, "Order is not live");
-        require(item.job == true, "Job not done");
-        require(item.receiver == msg.sender, "You are not the receiver")
-        ;
-        item.state = STATES.COMPLETED;
-        payable(msg.sender).transfer(item.amount);
+        require(msg.sender == item.receiver, "You are not the receiver");
+        require(item.state == STATES.PENDING, "Job not in pending state");
+        item.state = STATES.CREATOR_ACK;
     }
 
     function completeJob(uint256 orderId) external onlyOwner {
         order storage item = orders[orderId];
-        require(item.job == false, "Job already done");
-        item.job = true;
+        require(item.state == STATES.CREATOR_ACK, "Job not in appropriate state");
+        item.state = STATES.SUBSCRIBER_ACK;
+        payable(item.receiver).transfer(item.amount);
+        item.state = STATES.COMPLETED;
     }   
-    
-    function withdraw(uint256 orderId) external payable {
-        order storage item = orders[orderId];
-        require(item.state == STATES.PENDING, "Order is not live");
-        require(item.job == false, "Job already done");
-        require(item.creator == msg.sender, "You are not creator");
-        require(item.createdAt + timeoutPeriod < block.timestamp, "Timeout not over yet");
-        item.state = STATES.CANCELLED;
-        payable(msg.sender).transfer(item.amount);
-    }
 
     function raiseDispute(uint256 orderId) external {
         order storage item = orders[orderId];
         require(msg.sender == item.creator || msg.sender == item.receiver, "You are not authorized");
-        require(item.state == STATES.PENDING, "Order is not live");
+        require(item.state != STATES.COMPLETED, "Order is already complete, cant raise a dispute now");
         item.state = STATES.DISPUTED;
     }
+    // function withdraw(uint256 orderId) external payable {
+    //     order storage item = orders[orderId];
+    //     require(item.state == STATES.PENDING, "Order is not live");
+    //     require(item.job == false, "Job already done");
+    //     require(item.creator == msg.sender, "You are not creator");
+    //     require(item.createdAt + timeoutPeriod < block.timestamp, "Timeout not over yet");
+    //     item.state = STATES.CANCELLED;
+    //     payable(msg.sender).transfer(item.amount);
+    // }
 
     // function ownerWithdraw(uint256 amount) external  onlyOwner {
     //     payable(msg.sender).transfer(amount);
