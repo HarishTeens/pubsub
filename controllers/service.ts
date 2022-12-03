@@ -1,3 +1,4 @@
+import { DEFAULT_ACTION_TIMEOUT } from '../config/constants';
 import ServiceDB from '../models/Service';
 import ServiceModel, { IServiceUser , ACTIONS, IService} from '../models/Service';
 import UserDB from '../models/User';
@@ -6,7 +7,7 @@ const createService = async (req, res) => {
     const user = req.auth.user;
     const sv = new ServiceDB();
     const usr = new UserDB();
-    const { name, lockinFunds, actionTimeout, subscriberAction} = req.body;
+    const { name, lockinFunds, subscriberAction} = req.body;
 
     const creator : IServiceUser = {
         wallet: user,
@@ -17,7 +18,7 @@ const createService = async (req, res) => {
         id,
         name,
         lockinFunds,
-        actionTimeout,
+        actionTimeout: DEFAULT_ACTION_TIMEOUT,
         creator,
         subscriber: {
             action: subscriberAction
