@@ -4,13 +4,19 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
-const dotenv_1 = __importDefault(require("dotenv"));
 const body_parser_1 = __importDefault(require("body-parser"));
-dotenv_1.default.config();
+if (!process.env.ENV) {
+    require('dotenv').config();
+}
 const app = (0, express_1.default)();
 app.use(body_parser_1.default.json());
 const routes_1 = __importDefault(require("./config/routes"));
 const middlewares_1 = __importDefault(require("./middlewares"));
+app.use(function (req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
+});
 app.get("/", (_req, res) => {
     res.send("Welcome to easy crow!");
 });
