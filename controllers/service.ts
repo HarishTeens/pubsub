@@ -2,6 +2,8 @@ import { DEFAULT_ACTION_TIMEOUT } from '../config/constants';
 import ServiceDB from '../models/Service';
 import ServiceModel, { IServiceUser , ACTIONS, IService} from '../models/Service';
 import UserDB from '../models/User';
+import generateApiKey from 'generate-api-key';
+
 
 const createService = async (req, res) => {
     const user = req.auth.user;
@@ -14,11 +16,13 @@ const createService = async (req, res) => {
         action: ACTIONS.BOOLEAN
     }
     const id = sv.getRandomId();
+    const apiKey = generateApiKey({ method: 'string', length: 16 });
     const newService: IService = {
         id,
         name,
         lockinFunds,
         actionTimeout: DEFAULT_ACTION_TIMEOUT,
+        apiKey: apiKey.toString(),
         creator,
         subscriber: {
             action: subscriberAction

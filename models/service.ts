@@ -16,6 +16,7 @@ export interface IService {
     lockinFunds: number; //in POLYGON
     actionTimeout: number; // in ms
     creator: IServiceUser;
+    apiKey: string;
     agents?: IServiceUser[];
     subscriber: {
         action: ACTIONS;
