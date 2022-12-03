@@ -130,12 +130,12 @@ contract LockFunds is Ownable {
         DISPUTED
     }
     struct service {
-        uint256 amount;
+        uint256 amount; // in WEI
     }
     struct order {
         address creator;
         address receiver;
-        uint256 amount;
+        uint256 amount; // in WEI
         uint256 createdAt;
         bool job;
         STATES state;
@@ -153,6 +153,7 @@ contract LockFunds is Ownable {
     function lockFunds(uint256 orderId, uint256 serviceId, address receiver) external payable {
         order storage item = orders[orderId];
         service storage sItem = services[serviceId];
+        require(sItem.amount != 0, "Service not found");
         require(msg.value == sItem.amount, "Service amount is incorrect");
         require(item.createdAt == 0, "Order is already created");
         item.creator = msg.sender;
