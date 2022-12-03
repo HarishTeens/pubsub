@@ -30,4 +30,18 @@ export default class UserDB extends BaseDB {
     }
     return BaseDB.dynamoDB.update(payload).promise();
   }
+
+  public async addOrder(data: any) {
+    const payload: DynamoDB.DocumentClient.UpdateItemInput = {
+      TableName: this.tableName,
+      Key: { [this.pk]: data.user },
+      UpdateExpression: "SET orders = list_append(if_not_exists(orders, :emptyList), :order), lastUpdatedOn = :lastUpdatedOn",
+      ExpressionAttributeValues: {
+          ':order': [data.order],
+          ':emptyList': [],
+          ':lastUpdatedOn': moment().valueOf()
+      }
+    }
+    return BaseDB.dynamoDB.update(payload).promise();
+  }
 }

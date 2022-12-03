@@ -10,10 +10,10 @@ router.get("/services", controllers.services.listServices)
 router.get("/services/:id")
 router.put("/services", middlewares.validate(schemas.service.create), controllers.services.createService)
 
-router.get("/orders")
+router.get("/orders", controllers.orders.listOrders)
 router.get("/orders/:id")
-router.put("/ordres")
-router.post("/orders")
+router.put("/orders", middlewares.validate(schemas.order.create), controllers.orders.placeOrder);
+router.post("/orders") // UPDATE Status
 
 
 export default router;

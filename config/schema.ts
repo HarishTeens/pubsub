@@ -9,7 +9,14 @@ const service = {
     })
 }
 
+const order = {
+    create: Joi.object().keys({
+        service: Joi.string().required()
+    })
+}
+
 const schemas = {
-    service
+    service,
+    order
 }
 export default schemas;

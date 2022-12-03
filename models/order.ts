@@ -1,7 +1,7 @@
 import BaseDB from './base';
 import { IService, IServiceUser } from './Service';
 
-enum ORDER_STATUS {
+export enum ORDER_STATUS {
     ORDER_PLACED,
     FUNDS_LOCKEDIN,
     CREATOR_ACK,
@@ -12,7 +12,7 @@ enum ORDER_STATUS {
     FUNDS_REFUNDED
 }
 
-interface IOrder extends IService{
+export interface IOrder extends IService{
     status: ORDER_STATUS;
     subscriber: IServiceUser
 }
