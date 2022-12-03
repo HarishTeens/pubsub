@@ -15,7 +15,7 @@
 
 <small><i><a href='http://ecotrust-canada.github.io/markdown-toc/'>Table of contents generated with markdown-toc</a></i></small>
 
-<a href="https://whimsical.com/landing-page-GwUMnnkNSj34GLY6ioijWw@2Ux7TurymMm5Kkct9gRP"> <img src="./schematics.png"/> </a>
+<a href="https://whimsical.com/landing-page-GwUMnnkNSj34GLY6ioijWw@2Ux7TurymMm5Kkct9gRP"> <img src="./image.png"/> </a>
 
 
 
