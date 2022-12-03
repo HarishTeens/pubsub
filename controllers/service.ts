@@ -9,7 +9,7 @@ const createService = async (req, res) => {
     const user = req.auth.user;
     const sv = new ServiceDB();
     const usr = new UserDB();
-    const { name, lockinFunds, subscriberAction} = req.body;
+    const { name, description, lockinFunds, subscriberAction} = req.body;
 
     const creator : IServiceUser = {
         wallet: user,
@@ -20,6 +20,7 @@ const createService = async (req, res) => {
     const newService: IService = {
         id,
         name,
+        description,
         lockinFunds,
         actionTimeout: DEFAULT_ACTION_TIMEOUT,
         apiKey: apiKey.toString(),
@@ -47,7 +48,7 @@ const listServices = async (req, res) => {
 
     const userInfo = await usr.getByPK(user);
     const serviceIds = userInfo.Item?.services || [];
-    const services = await sv.batchGet(serviceIds);
+    const services = serviceIds.length === 0 ? [] : await sv.batchGet(serviceIds);
     res.json(services);
 }
 

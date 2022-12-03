@@ -4,7 +4,8 @@ const service = {
     create: Joi.object().keys({
         lockinFunds: Joi.number().required(),
         subscriberAction: Joi.number().required().min(0).max(1),
-        name: Joi.string().required()
+        name: Joi.string().required(),
+        description: Joi.string().required()
     })
 }
 

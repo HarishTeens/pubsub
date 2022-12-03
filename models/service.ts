@@ -13,6 +13,7 @@ export interface IServiceUser {
 export interface IService {
     id: string;
     name: string;
+    description: string;
     lockinFunds: number; //in POLYGON
     actionTimeout: number; // in ms
     creator: IServiceUser;
