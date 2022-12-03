@@ -1,10 +1,9 @@
 /**
  *Submitted for verification at polygonscan.com on 2022-12-03
-*/
+ */
 
 // SPDX-License-Identifier: MIT
 // File: @openzeppelin/contracts/utils/Context.sol
-
 
 // OpenZeppelin Contracts v4.4.1 (utils/Context.sol)
 
@@ -32,11 +31,9 @@ abstract contract Context {
 
 // File: @openzeppelin/contracts/access/Ownable.sol
 
-
 // OpenZeppelin Contracts (last updated v4.7.0) (access/Ownable.sol)
 
 pragma solidity ^0.8.0;
-
 
 /**
  * @dev Contract module which provides a basic access control mechanism, where
@@ -53,7 +50,10 @@ pragma solidity ^0.8.0;
 abstract contract Ownable is Context {
     address private _owner;
 
-    event OwnershipTransferred(address indexed previousOwner, address indexed newOwner);
+    event OwnershipTransferred(
+        address indexed previousOwner,
+        address indexed newOwner
+    );
 
     /**
      * @dev Initializes the contract setting the deployer as the initial owner.
@@ -100,7 +100,10 @@ abstract contract Ownable is Context {
      * Can only be called by the current owner.
      */
     function transferOwnership(address newOwner) public virtual onlyOwner {
-        require(newOwner != address(0), "Ownable: new owner is the zero address");
+        require(
+            newOwner != address(0),
+            "Ownable: new owner is the zero address"
+        );
         _transferOwnership(newOwner);
     }
 
@@ -117,8 +120,7 @@ abstract contract Ownable is Context {
 
 // File: yugen.sol
 
-
-pragma solidity ^0.8.0; 
+pragma solidity ^0.8.0;
 
 contract LockFunds is Ownable {
     uint256 public timeoutPeriod = 3 days;
@@ -140,17 +142,22 @@ contract LockFunds is Ownable {
         bool job;
         STATES state;
     }
-    mapping(uint256=>service) public services;
-    mapping(uint256=>order) public orders;
+    mapping(uint256 => service) public services;
+    mapping(uint256 => order) public orders;
 
-    mapping(address=>uint256[]) public orderToReceive;
-    mapping(address=>uint256[]) public orderCreated;
+    mapping(address => uint256[]) public orderToReceive;
+    mapping(address => uint256[]) public orderCreated;
 
     function createService(uint256 serviceId, uint256 amount) external {
         service storage item = services[serviceId];
         item.amount = amount;
     }
-    function lockFunds(uint256 orderId, uint256 serviceId, address receiver) external payable {
+
+    function lockFunds(
+        uint256 orderId,
+        uint256 serviceId,
+        address receiver
+    ) external payable {
         order storage item = orders[orderId];
         service storage sItem = services[serviceId];
         require(sItem.amount != 0, "Service not found");
@@ -174,16 +181,25 @@ contract LockFunds is Ownable {
 
     function completeJob(uint256 orderId) external onlyOwner {
         order storage item = orders[orderId];
-        require(item.state == STATES.CREATOR_ACK, "Job not in appropriate state");
+        require(
+            item.state == STATES.CREATOR_ACK,
+            "Job not in appropriate state"
+        );
         item.state = STATES.SUBSCRIBER_ACK;
         payable(item.receiver).transfer(item.amount);
         item.state = STATES.COMPLETED;
-    }   
+    }
 
     function raiseDispute(uint256 orderId) external {
         order storage item = orders[orderId];
-        require(msg.sender == item.creator || msg.sender == item.receiver, "You are not authorized");
-        require(item.state != STATES.COMPLETED, "Order is already complete, cant raise a dispute now");
+        require(
+            msg.sender == item.creator || msg.sender == item.receiver,
+            "You are not authorized"
+        );
+        require(
+            item.state != STATES.COMPLETED,
+            "Order is already complete, cant raise a dispute now"
+        );
         item.state = STATES.DISPUTED;
     }
     // function withdraw(uint256 orderId) external payable {
