@@ -1,7 +1,7 @@
 import { ethers } from "ethers";
 import jwt_decode from "jwt-decode";
 
-const auth = (req, res, next) => {
+const auth = async (req, res, next) => {
     try {        
         const headerToken = req.headers.authorization;
         const jwtToken = headerToken.split(" ")[1] ? headerToken.split(" ")[1] : null;

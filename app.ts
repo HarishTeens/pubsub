@@ -1,13 +1,13 @@
 import express from 'express';
 import dotenv from 'dotenv';
+import bodyParser from 'body-parser';
 dotenv.config();
 
 const app = express();
-import run from './models/index';
+app.use(bodyParser.json());
 import apis from './config/routes'
 import middlewares from './middlewares';
  
-
 
 app.get("/", (_req, res) => {
     res.send("Welcome to easy crow!")

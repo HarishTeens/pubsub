@@ -1,5 +1,5 @@
-import { Schema, model } from 'mongoose';
-import { IService, IServiceUser, serviceUserSchema } from './Service';
+import BaseDB from './base';
+import { IService, IServiceUser } from './Service';
 
 enum ORDER_STATUS {
     ORDER_PLACED,
@@ -16,22 +16,10 @@ interface IOrder extends IService{
     status: ORDER_STATUS;
     subscriber: IServiceUser
 }
-    
-// 2. Create a Schema corresponding to the document interface.
-const orderSchema = new Schema<IOrder>({
-    id: { type: String, required: true },
-    lockinFunds: { type: Number, required: true },
-    actionTimeout: { type: Number, required: true },
-    status: {type: Number, required: true},
-    creator: { type: serviceUserSchema, required: true },
-    agents: [serviceUserSchema],
-    subscriber: { type: serviceUserSchema, required: true }
-    
-},{
-    timestamps: true
-});
 
-// 3. Create a Model.
-const Order = model<IOrder>('Order', orderSchema);
-
-export default Order;
+export default class OrderDB extends BaseDB {
+    constructor() {
+        super("ECOrders", "id");
+    }
+    
+}
