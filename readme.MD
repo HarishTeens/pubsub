@@ -26,8 +26,6 @@ TRESC Protocol solves the problem of Centralised Intermediates & Transactional A
 
 
 
-![agent.png]()
-
 At any specific step if the next party doesn’t acknolwedge, the flow is going to timeout and revert back to the sender.
 - [Overview](#overview)
     + [Actions](#actions)
