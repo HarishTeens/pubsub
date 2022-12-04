@@ -1,4 +1,34 @@
+### Note for Polygon
+Polygon Mumbai contract link: (https://mumbai.polygonscan.com/address/0x568867A5e35d11eC3D72ac3dF70935347c432DEf)[https://mumbai.polygonscan.com/address/0x568867A5e35d11eC3D72ac3dF70935347c432DEf]
+We are targeting for Polygon prize. We have deployed our smart contract on Polygon Mumbai testnet.
+The problem TRESC PROTOCOL solves
+TRESC Protocol solves the problem of Centralised Intermediates & Transactional Authorities. Any business/transaction performed between two parties should have trustworthy & decentralized intermediates who are not biased on any of the basis.
 
+### big reasons why to use TRESC
+
+- overcome counter party risk
+- deals cant be mutated once service is created
+- Trustless payment money, not less not much, just the agreed amount
+- Automatic settllement of funds once the flow is complete
+- no need to trust centralised entities to resolve disputes
+- able to trust new individuals/companies.
+- Funds automatically reverted to the buyer on faults.
+
+## LifeCycle
+
+### Slide - 1 Normal flow
+
+![image](https://user-images.githubusercontent.com/33366456/205472568-cd46b5fb-587d-4a28-bf9a-dea344ad363a.png)
+
+### Slide -2 Agent flow
+
+![image](https://user-images.githubusercontent.com/33366456/205472583-0d8ae849-b084-4a6f-a812-1c95ebce6e75.png)
+
+
+
+![agent.png]()
+
+At any specific step if the next party doesn’t acknolwedge, the flow is going to timeout and revert back to the sender.
 - [Overview](#overview)
     + [Actions](#actions)
     + [APIs](#apis)
