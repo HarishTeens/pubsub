@@ -18,7 +18,7 @@ export default class BaseDB {
     }
 
     public getRandomId() {
-        return Math.random().toString(36).replace(/[^a-z0-9]+/g, '').substr(2, 10);
+        return Math.floor(Math.random() * 100000000).toString();
     }
 
     public async getMaster(val: string) {
